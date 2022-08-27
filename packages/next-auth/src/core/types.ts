@@ -326,6 +326,7 @@ export interface CallbacksOptions<
     session: Session
     user: User
     token: JWT
+    isUpdate: boolean
   }) => Awaitable<Session>
   /**
    * This callback is called whenever a JSON Web Token is created (i.e. at sign in)
@@ -345,6 +346,7 @@ export interface CallbacksOptions<
     account?: A
     profile?: P
     isNewUser?: boolean
+    isUpdate: boolean
   }) => Awaitable<JWT>
 }
 

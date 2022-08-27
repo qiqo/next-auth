@@ -116,14 +116,14 @@ export function useSession<R extends boolean>(options?: UseSessionOptions<R>) {
 }
 
 export type GetSessionParams = CtxOrReq & {
-  event?: "storage" | "timer" | "hidden" | string
+  event?: "storage" | "timer" | "hidden" | "update" | string
   triggerEvent?: boolean
   broadcast?: boolean
 }
 
 export async function getSession(params?: GetSessionParams) {
   const session = await fetchData<Session>(
-    "session",
+    params?.event === "update"? "session?update" : "session",
     __NEXTAUTH,
     logger,
     params
@@ -134,6 +134,9 @@ export async function getSession(params?: GetSessionParams) {
   return session
 }
 
+export async function updateSession() {
+  __NEXTAUTH._getSession({ event: "update" })
+}
 /**
  * Returns the current Cross Site Request Forgery Token (CSRF Token)
  * required to make POST requests (e.g. for signing in and signing out).
@@ -355,7 +358,7 @@ export function SessionProvider(props: SessionProviderProps) {
 
         // An event or session staleness occurred, update the client session.
         __NEXTAUTH._lastSync = now()
-        __NEXTAUTH._session = await getSession()
+        __NEXTAUTH._session = await getSession({event})
         setSession(__NEXTAUTH._session)
       } catch (error) {
         logger.error("CLIENT_SESSION_ERROR", error as Error)
