@@ -111,5 +111,8 @@
       "type": "opencollective",
       "url": "https://opencollective.com/nextauth"
     }
-  ]
+  ],
+  "dependencies": {
+    "pnpm": "^7.9.5"
+  }
 }
